@@ -58,8 +58,6 @@ public class RadixSort11 {
 
 	public static int getValue(int value,int radix,int indexFrmLst)
 	{
-
 		return    (value / (int) Math.pow(10,indexFrmLst)) % radix;
-
 	}
 }
