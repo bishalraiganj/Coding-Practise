@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class QuickSort {
+public class QuickSort10 {
 
 
 
