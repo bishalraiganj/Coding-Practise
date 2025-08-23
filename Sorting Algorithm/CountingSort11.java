@@ -6,10 +6,12 @@ public class CountingSort11 {
 	public static void main(String... args)
 	{
 
-		int[] intArr = {2,43,5,23,5,3,0,100};
+		int[] intArr = {23,4,5,55,88,97,90,92,81,100};
+
+//		int[] intArr2 = {1,23,5,7,0,8,3,4,2,86,97,233};
 
 
-		countingSort(intArr,0,100);
+		countingSort(intArr,4,233);
 		System.out.println(Arrays.toString(intArr));
 
 
@@ -28,14 +30,14 @@ public class CountingSort11 {
 
 
 		 for (int val : arr) {
-			 counts[val]++;
+			 counts[ val - start ]++;
 		 }
 
 		 for (int i = 0; i < counts.length; i++) {
 
 			 while (counts[i] > 0)
 			 {
-				 tempArr[tempCounter++] = i;
+				 tempArr[tempCounter++] = i + start;
 				 counts[i]--;
 			 }
 		 }
