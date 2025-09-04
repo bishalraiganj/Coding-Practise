@@ -54,7 +54,12 @@ public class SyncAsyncExample {
 
 
 
-		//Asynchronous + Non-blocking
+		//Asynchronous + blocking (only if system wide , some thread is blocked/idle doing i/o task ,non-blocking if task finishes immediately)
+		//Asynchronous + non-blocking (the following because , thenAccept() finishes immediately
+		//The caller is not waiting (since , control returns immediatley and caller is free to execute /do other tasks following instructions )
+		//but the worker thread will block for the i/o task , as in helper()  we have bw.write(str)
+		// the worker thread is one of fixedThreadPool's thread
+
 		CompletableFuture<Void> cf = CompletableFuture.supplyAsync(()->{
 
 			return helper(" Test No.%d \n ".formatted(3));
@@ -72,6 +77,8 @@ public class SyncAsyncExample {
 	}
 
 
+
+	//It is a Synchronous Blocking method , currently designed to block for 2 seconds (worker thread sleeps for 2 seconds)
 	public static LocalDateTime helper(String str)
 	{
 
