@@ -44,7 +44,7 @@ public class RadixSort12 {
 		{
 			counts[i] += counts[i-1];
 		}
-		System.out.println(Arrays.toString(counts));
+//		System.out.println(Arrays.toString(counts));
 
 
 
