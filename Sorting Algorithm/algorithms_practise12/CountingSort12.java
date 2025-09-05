@@ -25,6 +25,8 @@ public class CountingSort12 {
 			counts[val-rangeStart]++;
 		}
 
+
+
 		int[] temp = new int[arr.length];
 		int counter =0 ;
 		for(int i = 0 ; i < counts.length ; i++)
