@@ -21,7 +21,7 @@ class MaxHeap{
 			throw new IndexOutOfBoundsException(" Heap is Full ! ");
 		}
 		heap[size] = val;
-		fixHeapAbove(size );
+		fixHeapAbove(size);
 		size++;
 	}
 
@@ -89,7 +89,7 @@ class MaxHeap{
 	public void fixHeapAbove(int i)
 	{
 		int replacement = heap[i];
-		while(i > 0 && heap[i] > heap[getParent(i)])
+		while(i > 0 && replacement > heap[getParent(i)])
 		{
 			heap[i] = heap[getParent(i)];
 			i = getParent(i);
@@ -178,8 +178,37 @@ public class HeapSort_Practise_14 {
 		System.out.println(heap.maxExtract());
 		System.out.println(heap);
 
+		System.out.println("-".repeat(50));
 
+		int[] intArr = {12,-243,-23,-2,1,223,4,55,217,87,344};
+		heapSort(intArr);
+		System.out.println(Arrays.toString(intArr));
 
 	}
+
+
+
+	 public static void heapSort(int[] arr)
+	 {
+			MaxHeap heap = new MaxHeap(arr.length);
+		 for(int val : arr)
+		 {
+			 heap.insert(val);
+		 }
+
+
+		 System.out.print("=".repeat(50) + " [Heap Backing Array]");
+		 for(int i = arr.length - 1; i >=0 ; i--)
+		 {
+			 int val = heap.maxExtract();
+			 arr[i] = val;
+			 System.out.print(val + " ");
+
+		 }
+		 System.out.println("=".repeat(50));
+
+
+	 }
+
 
 }
