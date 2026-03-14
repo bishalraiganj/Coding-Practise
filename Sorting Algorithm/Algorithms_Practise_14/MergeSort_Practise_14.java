@@ -45,6 +45,7 @@ public class MergeSort_Practise_14 {
 			tempArr[counter++] = arr[i] <= arr[j] ? arr[i++] : arr[j++];
 		}
 
+
 		if(i < mid)
 		{
 			System.arraycopy(arr,i,arr,start + counter ,mid - i);
