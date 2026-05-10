@@ -1,16 +1,16 @@
 package com.bishal.grpclearning.sec06;
 
 import com.bishal.grpclearning.sec06.repository.AccountRepository;
-import com.bishaladhikary.grpclearning.models.sec06.AccountBalance;
-import com.bishaladhikary.grpclearning.models.sec06.AllAccountsResponse;
-import com.bishaladhikary.grpclearning.models.sec06.BalanceCheckRequest;
+import com.bishaladhikary.grpclearning.models.sec06.*;
 import com.bishaladhikary.grpclearning.models.sec06.BankServiceGrpc;
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
@@ -48,4 +48,31 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 		responseObserver.onCompleted();
 
 	}
+
+
+	@Override
+	public void withdraw(WithdrawRequest request, StreamObserver<Money> responseObserver) {
+		var accountNumber = request.getAccountNumber();
+		var requestAmount = request.getAmount();
+		var availableBalance =  AccountRepository.getBalance(accountNumber);
+
+		if(requestAmount > availableBalance) {
+			responseObserver.onCompleted();
+		return;
+		}
+
+		for( int i = 0 ; i < requestAmount / 10 ; i++)
+		{
+			var money = Money.newBuilder().setAmount(10).build();
+			responseObserver.onNext(money);
+			log.info("money sent {}", money);
+			AccountRepository.deduceAmount(accountNumber, 10);
+			Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
+
+		}
+
+		responseObserver.onCompleted();
+
+	}
+
 }
