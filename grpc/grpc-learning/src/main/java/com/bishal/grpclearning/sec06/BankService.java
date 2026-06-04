@@ -1,6 +1,7 @@
 package com.bishal.grpclearning.sec06;
 
 import com.bishal.grpclearning.sec06.repository.AccountRepository;
+import com.bishal.grpclearning.sec06.requestHandlers.DepositRequestHandler;
 import com.bishaladhikary.grpclearning.models.sec06.*;
 import com.bishaladhikary.grpclearning.models.sec06.BankServiceGrpc;
 import com.google.common.util.concurrent.Uninterruptibles;
@@ -75,4 +76,8 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
 	}
 
+	@Override
+	public StreamObserver<DepositRequest> deposit(StreamObserver<AccountBalance> responseObserver) {
+		return new DepositRequestHandler(responseObserver);
+	}
 }
