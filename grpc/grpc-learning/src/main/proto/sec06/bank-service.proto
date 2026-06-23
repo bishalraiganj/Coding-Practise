@@ -55,4 +55,5 @@ service BankService{
   rpc Withdraw(WithdrawRequest) returns (stream Money);
 
   rpc deposit(stream DepositRequest) returns (AccountBalance);
+
 }

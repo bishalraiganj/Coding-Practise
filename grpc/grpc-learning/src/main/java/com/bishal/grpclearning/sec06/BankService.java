@@ -71,7 +71,7 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 			Uninterruptibles.sleepUninterruptibly(1, TimeUnit.SECONDS);
 
 		}
-
+;
 		responseObserver.onCompleted();
 
 	}
