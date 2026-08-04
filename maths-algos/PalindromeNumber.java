@@ -10,6 +10,7 @@ public class PalindromeNumber {
 	}
 
 
+	//Time complexity theta (d) where d is the number of digits in the input number
 	public static boolean isPalindrome(int number)
 	{
 		int rev = 0 ;
