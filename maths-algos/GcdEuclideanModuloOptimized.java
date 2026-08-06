@@ -16,6 +16,8 @@ public class GcdEuclideanModuloOptimized {
 *
 * because , modulo is just repeated subtraction when a > b, then a % b is multiple subtractions until remainder  < b
 *
+* NOTE : Stein's binary gcd algorithm optimizes even further and is a better algorithm
+*
 * */
 	public static int gcd(int a, int b)
 	{
