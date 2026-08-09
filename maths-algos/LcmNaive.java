@@ -17,7 +17,7 @@ public class LcmNaive {
 			{
 				return res;
 			}
-			res++;
+			res *= res;
 		}
 	}
 
