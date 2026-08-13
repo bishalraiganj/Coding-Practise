@@ -7,6 +7,9 @@ public class OptimizedTrailingZerosInFactorial {
 		System.out.println(trailingZerosInFactorial(12));
 		System.out.println(trailingZerosInFactorial(4));
 
+		System.out.println(trailingZerosInFactorial(10));
+		System.out.println(trailingZerosInFactorial(30));
+
 
 	}
 
