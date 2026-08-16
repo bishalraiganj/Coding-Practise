@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Sorting Algorithm" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/maths-algos" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/bitwise-algos" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

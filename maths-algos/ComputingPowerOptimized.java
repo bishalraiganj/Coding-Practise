@@ -387,7 +387,7 @@ public class ComputingPowerOptimized {
 	 * we know:
 	 *
 	 *
-	 *     2k = n - 1
+	 *     2k = n - 1 ( because n = 2k + 1 )
 	 *
 	 *
 	 * Therefore:
