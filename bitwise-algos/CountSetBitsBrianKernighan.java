@@ -37,7 +37,7 @@ public class CountSetBitsBrianKernighan {
 		return tbl[ n & 255]
 			+ tbl [ (n >> 8) & 255]
 			+ tbl [ (n >> 16) & 255]
-			+ tbl [ n >> 24] & 255;
+			+ tbl [ n >> 24 & 255];
 	}
 
 	public static void toBinaryUtility(int n)
