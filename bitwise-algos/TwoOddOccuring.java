@@ -10,6 +10,8 @@ public class TwoOddOccuring {
 		occuring(arr3);
 	}
 
+
+	//XOR return 0 only if both are same and 1 if both are different
 	public static void occuring(int[] arr)
 	{
 		int n = arr[0];
@@ -20,24 +22,41 @@ public class TwoOddOccuring {
 
 		int k =  n & ( ~(n-1));
 
-		int firstOddOccuring = 0;
-		for(int i = 0 ; i < arr.length ; i++)
-		{
-			if( (arr[ i ] & k) != 0)
-			{
-				firstOddOccuring ^= arr[i];
-			}
-		}
 
-		int secondOddOccuring = 0 ;
-		for(int i = 0 ; i < arr.length ; i++)
+		// No need for two loops we can find both high and low last set bit groups in one for loop only :-)
+		int a = 0;
+		int b = 0;
+		for(int i = 0; i < arr.length ; i++)
 		{
-			if( (arr[i] & k) == 0)
+			if((arr[i] & k) !=0)
 			{
-				secondOddOccuring ^= arr[i];
+				a ^= arr[i];
+			}else{
+				b ^= arr[i];
 			}
 		}
-		System.out.println(firstOddOccuring + " " + secondOddOccuring);
+		System.out.println(a + " " + b);
+
+
+
+//		int firstOddOccuring = 0;
+//		for(int i = 0 ; i < arr.length ; i++)
+//		{
+//			if( (arr[ i ] & k) != 0)
+//			{
+//				firstOddOccuring ^= arr[i];
+//			}
+//		}
+//
+//		int secondOddOccuring = 0 ;
+//		for(int i = 0 ; i < arr.length ; i++)
+//		{
+//			if( (arr[i] & k) == 0)
+//			{
+//				secondOddOccuring ^= arr[i];
+//			}
+//		}
+//		System.out.println(firstOddOccuring + " " + secondOddOccuring);
 
 
 	}
