@@ -1,0 +1,623 @@
+public class PrimeFactorization {
+
+    public static void main(String[] args) {
+
+        /*
+         * ================================================================
+         * EXAMPLES
+         * ================================================================
+         *
+         * 450 = 2 × 3 × 3 × 5 × 5
+         *
+         * Expected output:
+         *
+         * 2
+         * 3
+         * 3
+         * 5
+         * 5
+         */
+        primeFactors(450);
+
+
+        /*
+         * Other examples:
+         *
+         * primeFactors(14);
+         *     14 = 2 × 7
+         *
+         * primeFactors(84);
+         *     84 = 2 × 2 × 3 × 7
+         *
+         * primeFactors(35);
+         *     35 = 5 × 7
+         *
+         * primeFactors(13);
+         *     13 is prime
+         *
+         * primeFactors(1);
+         *     1 has no prime factors
+         */
+    }
+
+
+    /*
+     * ====================================================================
+     * PRIME FACTORIZATION
+     * ====================================================================
+     *
+     * Given an integer n > 1, find all of its prime factors.
+     *
+     * Example:
+     *
+     *     n = 450
+     *
+     * Prime factorization:
+     *
+     *     450 = 2 × 3² × 5²
+     *
+     * If we print every occurrence, the output is:
+     *
+     *     2, 3, 3, 5, 5
+     *
+     *
+     * ====================================================================
+     * CORE IDEA
+     * ====================================================================
+     *
+     * We repeatedly:
+     *
+     *     1. Find a factor of the current n.
+     *     2. Print that factor.
+     *     3. Divide n by that factor.
+     *     4. Continue with the smaller n.
+     *
+     *
+     * The important question is:
+     *
+     *     "How do we know that a factor we find is PRIME?"
+     *
+     *
+     * The answer is the key invariant of this algorithm.
+     *
+     *
+     * ====================================================================
+     * KEY INVARIANT
+     * ====================================================================
+     *
+     * We test possible factors from SMALLER to LARGER.
+     *
+     * Therefore, before testing a candidate i:
+     *
+     *     every smaller possible prime factor has already been tested
+     *     and completely removed from n.
+     *
+     *
+     * Suppose a candidate i is COMPOSITE.
+     *
+     * Then i itself can be written as a product of smaller primes:
+     *
+     *     i = p × q
+     *
+     * or more generally:
+     *
+     *     i = p1^a1 × p2^a2 × ...
+     *
+     * where p1, p2, ... are prime.
+     *
+     *
+     * Therefore, if i divides n, its smaller prime factors must also
+     * divide n.
+     *
+     * But those smaller prime factors have already been removed.
+     *
+     * Therefore a composite i CANNOT divide the current n.
+     *
+     *
+     * Consequently:
+     *
+     *     IF i divides the current n,
+     *     THEN i MUST be prime.
+     *
+     *
+     * Very important:
+     *
+     *     We do NOT assume every candidate i is prime.
+     *
+     *     We only know that a candidate that successfully divides the
+     *     current n must be prime.
+     *
+     *
+     * ====================================================================
+     * EXAMPLE OF THE INVARIANT
+     * ====================================================================
+     *
+     * Consider:
+     *
+     *     n = 175
+     *
+     *     175 = 5 × 5 × 7
+     *
+     * We find 5:
+     *
+     *     175 / 5 = 35
+     *      35 / 5 = 7
+     *
+     * Now:
+     *
+     *     n = 7
+     *
+     * Notice that we would never later encounter a situation where
+     * 25 divides n.
+     *
+     * Why?
+     *
+     *     25 = 5 × 5
+     *
+     * If 25 divided n, then 5 would also divide n.
+     *
+     * But all factors of 5 were already removed.
+     *
+     * Therefore 25 cannot divide the current n.
+     *
+     *
+     * ====================================================================
+     * WHY DO WE ONLY SEARCH UP TO √n?
+     * ====================================================================
+     *
+     * If n is composite:
+     *
+     *     n = a × b
+     *
+     * Assume:
+     *
+     *     a <= b
+     *
+     * Then:
+     *
+     *     a × a <= a × b
+     *
+     * Therefore:
+     *
+     *     a² <= n
+     *
+     * So:
+     *
+     *     a <= √n
+     *
+     *
+     * Therefore:
+     *
+     *     EVERY COMPOSITE NUMBER HAS AT LEAST ONE FACTOR <= √n.
+     *
+     *
+     * This means that if we cannot find a factor <= √n,
+     * the number must be prime.
+     *
+     *
+     * ====================================================================
+     * IMPORTANT: n IS THE CURRENT n
+     * ====================================================================
+     *
+     * We are not always working with the original number.
+     *
+     * Example:
+     *
+     *     original n = 450
+     *
+     * After removing 2:
+     *
+     *     n = 225
+     *
+     * After removing 3:
+     *
+     *     n = 75
+     *
+     * After removing another 3:
+     *
+     *     n = 25
+     *
+     * After removing 5:
+     *
+     *     n = 5
+     *
+     * So the condition:
+     *
+     *     i * i <= n
+     *
+     * uses the CURRENT remaining n.
+     *
+     *
+     * ====================================================================
+     * STEP 1: HANDLE FACTOR 2
+     * ====================================================================
+     *
+     * 2 is the only even prime.
+     *
+     * We remove it separately so that later we don't have to test
+     * even numbers.
+     *
+     * Example:
+     *
+     *     n = 40
+     *
+     *     40 / 2 = 20
+     *     20 / 2 = 10
+     *     10 / 2 = 5
+     *
+     * Therefore:
+     *
+     *     40 = 2 × 2 × 2 × 5
+     *
+     * After this loop finishes:
+     *
+     *     n is guaranteed NOT to be divisible by 2.
+     *
+     *
+     * ====================================================================
+     * STEP 2: HANDLE FACTOR 3
+     * ====================================================================
+     *
+     * We also handle 3 separately.
+     *
+     * After handling 2 and 3, we can skip every number divisible by
+     * either 2 or 3.
+     *
+     *
+     * ====================================================================
+     * STEP 3: CHECK 6k ± 1
+     * ====================================================================
+     *
+     * Every prime greater than 3 must have the form:
+     *
+     *     6k - 1
+     *
+     * or
+     *
+     *     6k + 1
+     *
+     *
+     * For example:
+     *
+     *     5  = 6(1) - 1
+     *     7  = 6(1) + 1
+     *     11 = 6(2) - 1
+     *     13 = 6(2) + 1
+     *     17 = 6(3) - 1
+     *     19 = 6(3) + 1
+     *
+     *
+     * Therefore we test:
+     *
+     *     5, 7,
+     *     11, 13,
+     *     17, 19,
+     *     23, 25,
+     *     ...
+     *
+     *
+     * BUT:
+     *
+     *     6k ± 1 does NOT mean the number is prime.
+     *
+     * Example:
+     *
+     *     25 = 6(4) + 1
+     *
+     * but:
+     *
+     *     25 = 5 × 5
+     *
+     * So 25 is composite.
+     *
+     * The 6k ± 1 rule only tells us that it is a possible candidate.
+     *
+     * Our divisibility test is what determines whether it can actually
+     * be a prime factor of the CURRENT n.
+     *
+     *
+     * ====================================================================
+     * WHY DOES A COMPOSITE CANDIDATE NEVER GET PRINTED?
+     * ====================================================================
+     *
+     * Consider candidate:
+     *
+     *     25
+     *
+     * Suppose:
+     *
+     *     25 divides n
+     *
+     * Since:
+     *
+     *     25 = 5 × 5
+     *
+     * then:
+     *
+     *     5 divides n
+     *
+     * But 5 was tested earlier.
+     *
+     * And our algorithm completely removed all factors of 5:
+     *
+     *     while (n % 5 == 0)
+     *         n /= 5;
+     *
+     * Therefore 25 cannot divide the remaining n.
+     *
+     *
+     * The same reasoning works for every composite candidate.
+     *
+     *
+     * ====================================================================
+     * REPEATED DIVISION
+     * ====================================================================
+     *
+     * A prime can occur multiple times.
+     *
+     * Example:
+     *
+     *     450 = 2 × 3 × 3 × 5 × 5
+     *
+     * Therefore, once we find a factor i, we keep dividing:
+     *
+     *     while (n % i == 0)
+     *
+     * This removes ALL occurrences of i.
+     *
+     *
+     * ====================================================================
+     * FINAL REMAINING n
+     * ====================================================================
+     *
+     * At the end we may have some n > 1 remaining.
+     *
+     * Example:
+     *
+     *     14
+     *
+     * Remove 2:
+     *
+     *     14 / 2 = 7
+     *
+     * Now:
+     *
+     *     n = 7
+     *
+     * We don't need to search for 7.
+     *
+     * Why?
+     *
+     * If 7 were composite, it would have some factor <= √7.
+     *
+     * But no such factor remains to be found.
+     *
+     * Therefore:
+     *
+     *     remaining n > 1
+     *     =>
+     *     remaining n is prime
+     *
+     *
+     * This final n can be a prime larger than √(original n).
+     *
+     *
+     * ====================================================================
+     */
+
+    public static void primeFactors(int n) {
+
+        // ---------------------------------------------------------------
+        // CASE: n <= 1
+        // ---------------------------------------------------------------
+        //
+        // 1 is neither prime nor composite.
+        //
+        // Therefore it has no prime factors.
+        //
+        if (n <= 1) {
+            return;
+        }
+
+
+        // ===============================================================
+        // FACTOR 2
+        // ===============================================================
+        //
+        // 2 is the only even prime.
+        //
+        // Keep dividing while 2 divides n.
+        //
+        // Example:
+        //
+        //     n = 40
+        //
+        //     print 2
+        //     n = 20
+        //
+        //     print 2
+        //     n = 10
+        //
+        //     print 2
+        //     n = 5
+        //
+        //     stop
+        //
+        // So:
+        //
+        //     40 = 2 × 2 × 2 × 5
+        //
+        while (n % 2 == 0) {
+
+            System.out.println(2);
+
+            n /= 2;
+        }
+
+
+        // ===============================================================
+        // FACTOR 3
+        // ===============================================================
+        //
+        // Remove all occurrences of 3.
+        //
+        // After this loop:
+        //
+        //     n is NOT divisible by 2
+        //     n is NOT divisible by 3
+        //
+        while (n % 3 == 0) {
+
+            System.out.println(3);
+
+            n /= 3;
+        }
+
+
+        // ===============================================================
+        // FACTORS GREATER THAN 3
+        // ===============================================================
+        //
+        // Every prime greater than 3 is of the form:
+        //
+        //     6k - 1
+        //
+        // or:
+        //
+        //     6k + 1
+        //
+        // Therefore we test:
+        //
+        //     5, 7
+        //     11, 13
+        //     17, 19
+        //     23, 25
+        //     ...
+        //
+        // i       = 5, 11, 17, 23, ...
+        // i + 2   = 7, 13, 19, 25, ...
+        //
+        //
+        // WHY i * i <= n?
+        //
+        // Because:
+        //
+        //     i <= √n
+        //
+        // and every composite number has a factor <= √n.
+        //
+        // Notice that n is the CURRENT remaining n.
+        //
+        for (int i = 5; i * i <= n; i += 6) {
+
+
+            // ===========================================================
+            // TEST i
+            // ===========================================================
+            //
+            // Example:
+            //
+            //     i = 5
+            //
+            // If 5 divides n, remove every occurrence of 5.
+            //
+            // IMPORTANT:
+            //
+            // We do NOT need to prove separately that i is prime.
+            //
+            // If i actually divides the current n, i MUST be prime.
+            //
+            // Why?
+            //
+            // Suppose i were composite.
+            //
+            // Then i would contain a smaller prime factor.
+            //
+            // Example:
+            //
+            //     i = 25
+            //
+            //     25 = 5 × 5
+            //
+            // If 25 divided n, then 5 would also divide n.
+            //
+            // But 5 was already processed and completely removed.
+            //
+            // Therefore 25 cannot divide the current n.
+            //
+            while (n % i == 0) {
+
+                System.out.println(i);
+
+                n /= i;
+            }
+
+
+            // ===========================================================
+            // TEST i + 2
+            // ===========================================================
+            //
+            // The second possible prime position in this block of six.
+            //
+            // Example:
+            //
+            //     i = 5
+            //
+            //     i + 2 = 7
+            //
+            // If 7 divides n, remove all occurrences of 7.
+            //
+            while (n % (i + 2) == 0) {
+
+                System.out.println(i + 2);
+
+                n /= (i + 2);
+            }
+        }
+
+
+        // ===============================================================
+        // FINAL REMAINING PRIME
+        // ===============================================================
+        //
+        // If n > 3 remains, n itself must be prime.
+        //
+        // Why?
+        //
+        // If n were composite, it would have a factor <= √n.
+        //
+        // But the loop has already searched all relevant candidates
+        // up to √n.
+        //
+        // Therefore n cannot be composite.
+        //
+        // Hence:
+        //
+        //     n > 3
+        //     =>
+        //     n is prime
+        //
+        //
+        // Example:
+        //
+        //     original n = 14
+        //
+        //     remove 2
+        //
+        //     n = 7
+        //
+        // The remaining 7 is printed here.
+        //
+        // Notice that:
+        //
+        //     7 > √14
+        //
+        // This is perfectly fine because we are now dealing with the
+        // CURRENT n = 7, not the original n = 14.
+        //
+        if (n > 3) {
+
+            System.out.println(n);
+        }
+    }
+}
